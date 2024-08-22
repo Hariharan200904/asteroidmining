@@ -1,63 +1,23 @@
 import random
 import time
-
 # Simulated sensor data
 def get_sensor_data():
     # Returns a simulated distance reading in kilometers
     return random.uniform(0, 25)
-
 # Move the rover forward
 def move_forward(speed):
     print(f"Moving forward at speed {speed}")
-
 # Move the rover backward
 def move_backward(speed):
     print(f"Moving backward at speed {speed}")
-
 # Turn the rover
 def turn_left(angle):
     print(f"Turning left by {angle} degrees")
-
 def turn_right(angle):
     print(f"Turning right by {angle} degrees")
-
 # Stop the rover
 def stop():
     print("Stopping the rover")
-
-def main():
-    try:
-        while True:
-            distance = get_sensor_data()
-            print(f"Distance to obstacle: {distance} km")
-
-  import random
-import time
-
-# Simulated sensor data
-def get_sensor_data():
-    # Returns a simulated distance reading in kilometers
-    return random.uniform(0, 25)
-
-# Move the rover forward
-def move_forward(speed):
-    print(f"Moving forward at speed {speed}")
-
-# Move the rover backward
-def move_backward(speed):
-    print(f"Moving backward at speed {speed}")
-
-# Turn the rover
-def turn_left(angle):
-    print(f"Turning left by {angle} degrees")
-
-def turn_right(angle):
-    print(f"Turning right by {angle} degrees")
-
-# Stop the rover
-def stop():
-    print("Stopping the rover")
-
 def main():
     try:
         while True:
