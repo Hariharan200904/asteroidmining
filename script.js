@@ -36,14 +36,14 @@ function startSimulation() {
         const distance = getSensorData();
         document.getElementById('distance').innerText = `Distance to obstacle: ${distance.toFixed(2)} cm`;
 
-        if (distance < 20) {
+        if (distance < 5) {
             stop();
             turnRight(90);
             setTimeout(() => {
-                moveForward(10);
+                moveForward(40);
             }, 1000);
         } else {
-            moveForward(10);
+            moveForward();
         }
     }, 1000);
 }
