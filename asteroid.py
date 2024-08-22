@@ -31,7 +31,7 @@ def main():
             distance = get_sensor_data()
             print(f"Distance to obstacle: {distance} cm")
 
-            if distance < 20:
+            if distance < 500000:
                 # Obstacle detected, stop and turn
                 stop()
                 turn_right(90)
