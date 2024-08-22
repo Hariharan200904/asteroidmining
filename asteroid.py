@@ -29,7 +29,7 @@ def main():
     try:
         while True:
             distance = get_sensor_data()
-            print(f"Distance to obstacle: {distance} cm")
+            print(f"Distance to obstacle: {distance} km")
 
   import random
 import time
@@ -62,7 +62,7 @@ def main():
     try:
         while True:
             distance = get_sensor_data()
-            print(f"Distance to obstacle: {distance} cm")
+            print(f"Distance to obstacle: {distance} km")
 
             if distance < 5:
                 # Obstacle detected, stop and turn
