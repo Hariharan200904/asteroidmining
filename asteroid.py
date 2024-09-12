@@ -1,46 +1,41 @@
-import random
-import time
-# Simulated sensor data
-def get_sensor_data():
-    # Returns a simulated distance reading in kilometers
-    return random.uniform(0, 25)
-# Move the rover forward
-def move_forward(speed):
-    print(f"Moving forward at speed {speed}")
-# Move the rover backward
-def move_backward(speed):
-    print(f"Moving backward at speed {speed}")
-# Turn the rover
-def turn_left(angle):
-    print(f"Turning left by {angle} degrees")
-def turn_right(angle):
-    print(f"Turning right by {angle} degrees")
-# Stop the rover
-def stop():
-    print("Stopping the rover")
-def main():
-    try:
-        while True:
-            distance = get_sensor_data()
-            print(f"Distance to obstacle: {distance} km")
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rover Control Panel</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rover Control Panel</h1>
 
-            if distance < 5:
-                # Obstacle detected, stop and turn
-                stop()
-                # Randomly choose to turn left or right
-                if random.choice([True, False]):
-                    turn_left(90)
-                else:
-                    turn_right(90)
-                time.sleep(1)  # Wait for a second before moving again
-                move_forward(40)  # Moving forward at 40 kilometers per hour
-            else:
-                move_forward(30)
+        <!-- Rover status -->
+        <div class="status-box">
+            <h2>Rover Status: <span id="rover-status">Stopped</span></h2>
+        </div>
 
-            time.sleep(30)  # Adjust delay as needed
-    except KeyboardInterrupt:
-        stop()
-        print("Program terminated by user")
+        <!-- Obstacle distance -->
+        <div class="distance-box">
+            <h2>Distance to Obstacle: <span id="distance">N/A</span> km</h2>
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+        </div>
 
-if __name__ == "__main__":
-    main()
+        <!-- Control Panel -->
+        <div class="control-panel">
+            <button id="start-btn" class="control-btn">Start Rover</button>
+            <button id="stop-btn" class="control-btn">Stop Rover</button>
+        </div>
+
+        <!-- Console for movements -->
+        <div class="console">
+            <h3>Rover Actions</h3>
+            <ul id="action-log"></ul>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
