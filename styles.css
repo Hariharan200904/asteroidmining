@@ -1,87 +1,85 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+document.addEventListener('DOMContentLoaded', () => {
+    const roverStatus = document.getElementById('rover-status');
+    const distanceElement = document.getElementById('distance');
+    const progressElement = document.getElementById('progress');
+    const actionLog = document.getElementById('action-log');
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
 
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #f06, #4a90e2);
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-}
+    let intervalId = null;
+    let isRoverRunning = false;
 
-.container {
-    background-color: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    width: 400px;
-}
+    // Start the rover simulation
+    startBtn.addEventListener('click', () => {
+        if (!isRoverRunning) {
+            roverStatus.textContent = 'Running';
+            isRoverRunning = true;
 
-h1 {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
+            intervalId = setInterval(() => {
+                const distance = getSensorData();
+                updateDistance(distance);
 
-.status-box, .distance-box {
-    margin: 20px 0;
-}
+                if (distance < 5) {
+                    addLog('Obstacle detected: Stopping and turning...');
+                    stopRover();
+                    setTimeout(() => {
+                        const direction = Math.random() < 0.5 ? 'left' : 'right';
+                        addLog(`Turning ${direction}`);
+                        updateRoverStatus(`Turning ${direction}`);
+                    }, 1000);
+                } else {
+                    moveForward(30);
+                }
+            }, 3000); // Simulating rover actions every 3 seconds
+        }
+    });
 
-.progress-bar {
-    background-color: white;
-    border-radius: 10px;
-    height: 25px;
-    width: 100%;
-    margin: 10px 0;
-}
+    // Stop the rover simulation
+    stopBtn.addEventListener('click', () => {
+        if (isRoverRunning) {
+            clearInterval(intervalId);
+            stopRover();
+            isRoverRunning = false;
+        }
+    });
 
-.progress {
-    height: 100%;
-    width: 0;
-    background-color: green;
-    border-radius: 10px;
-    transition: width 0.5s ease;
-}
+    // Simulate sensor data (random distance between 0 and 25 km)
+    function getSensorData() {
+        return (Math.random() * 25).toFixed(2);
+    }
 
-.control-panel {
-    display: flex;
-    justify-content: space-between;
-}
+    // Update the distance and progress bar
+    function updateDistance(distance) {
+        distanceElement.textContent = distance;
+        const progress = (distance / 25) * 100;
+        progressElement.style.width = `${progress}%`;
+        if (distance < 5) {
+            progressElement.style.backgroundColor = 'red';
+        } else {
+            progressElement.style.backgroundColor = 'green';
+        }
+    }
 
-.control-btn {
-    background-color: #4a90e2;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    // Update rover status
+    function updateRoverStatus(status) {
+        roverStatus.textContent = status;
+    }
 
-.control-btn:hover {
-    background-color: #357abd;
-}
+    // Log actions in the console
+    function addLog(message) {
+        const li = document.createElement('li');
+        li.textContent = message;
+        actionLog.appendChild(li);
+    }
 
-.console {
-    margin-top: 30px;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 15px;
-    border-radius: 10px;
-    max-height: 150px;
-    overflow-y: auto;
-}
+    // Rover control functions
+    function moveForward(speed) {
+        addLog(`Moving forward at ${speed} km/h`);
+        updateRoverStatus('Moving Forward');
+    }
 
-.console ul {
-    list-style: none;
-    padding: 0;
-}
-
-.console li {
-    margin: 5px 0;
-    color: #ddd;
-    font-size: 0.9em;
-}
+    function stopRover() {
+        addLog('Rover stopped');
+        updateRoverStatus('Stopped');
+    }
+});
