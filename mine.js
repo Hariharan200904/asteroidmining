@@ -1,53 +1,85 @@
-let robots = [
-    { id: 1, mining: false, battery: 100 },
-    { id: 2, mining: false, battery: 100 },
-    { id: 3, mining: false, battery: 100 }
-];
+document.addEventListener('DOMContentLoaded', () => {
+    const roverStatus = document.getElementById('rover-status');
+    const distanceElement = document.getElementById('distance');
+    const progressElement = document.getElementById('progress');
+    const actionLog = document.getElementById('action-log');
+    const startBtn = document.getElementById('start-btn');
+    const stopBtn = document.getElementById('stop-btn');
 
-function renderRobots() {
-    const robotContainer = document.getElementById('robots');
-    robotContainer.innerHTML = '';
-    robots.forEach(robot => {
-        const robotElement = document.createElement('div');
-        robotElement.className = 'robot';
-        robotElement.innerHTML = `
-            <p>Robot ${robot.id}</p>
-            <p>Battery: ${robot.battery}%</p>
-            <p>Mining: ${robot.mining ? 'Yes' : 'No'}</p>
-        `;
-        robotContainer.appendChild(robotElement);
-    });
-}
+    let intervalId = null;
+    let isRoverRunning = false;
 
-function startMining() {
-    robots.forEach(robot => {
-        if (robot.battery > 20) {
-            robot.mining = true;
+    // Start the rover simulation
+    startBtn.addEventListener('click', () => {
+        if (!isRoverRunning) {
+            roverStatus.textContent = 'Running';
+            isRoverRunning = true;
+
+            intervalId = setInterval(() => {
+                const distance = getSensorData();
+                updateDistance(distance);
+
+                if (distance < 5) {
+                    addLog('Obstacle detected: Stopping and turning...');
+                    stopRover();
+                    setTimeout(() => {
+                        const direction = Math.random() < 0.5 ? 'left' : 'right';
+                        addLog(`Turning ${direction}`);
+                        updateRoverStatus(`Turning ${direction}`);
+                    }, 1000);
+                } else {
+                    moveForward(30);
+                }
+            }, 3000); // Simulating rover actions every 3 seconds
         }
     });
-    renderRobots();
-}
 
-function stopMining() {
-    robots.forEach(robot => {
-        robot.mining = false;
-    });
-    renderRobots();
-}
-
-document.getElementById('start-btn').addEventListener('click', startMining);
-document.getElementById('stop-btn').addEventListener('click', stopMining);
-
-setInterval(() => {
-    robots.forEach(robot => {
-        if (robot.mining && robot.battery > 0) {
-            robot.battery -= 5; // Simulate battery drain
-            if (robot.battery < 20) {
-                robot.mining = false; // Stop mining if battery too low
-            }
+    // Stop the rover simulation
+    stopBtn.addEventListener('click', () => {
+        if (isRoverRunning) {
+            clearInterval(intervalId);
+            stopRover();
+            isRoverRunning = false;
         }
     });
-    renderRobots();
-}, 1000);
 
-renderRobots();
+    // Simulate sensor data (random distance between 0 and 25 km)
+    function getSensorData() {
+        return (Math.random() * 25).toFixed(2);
+    }
+
+    // Update the distance and progress bar
+    function updateDistance(distance) {
+        distanceElement.textContent = distance;
+        const progress = (distance / 25) * 100;
+        progressElement.style.width = `${progress}%`;
+        if (distance < 5) {
+            progressElement.style.backgroundColor = 'red';
+        } else {
+            progressElement.style.backgroundColor = 'green';
+        }
+    }
+
+    // Update rover status
+    function updateRoverStatus(status) {
+        roverStatus.textContent = status;
+    }
+
+    // Log actions in the console
+    function addLog(message) {
+        const li = document.createElement('li');
+        li.textContent = message;
+        actionLog.appendChild(li);
+    }
+
+    // Rover control functions
+    function moveForward(speed) {
+        addLog(`Moving forward at ${speed} km/h`);
+        updateRoverStatus('Moving Forward');
+    }
+
+    function stopRover() {
+        addLog('Rover stopped');
+        updateRoverStatus('Stopped');
+    }
+});
