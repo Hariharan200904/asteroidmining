@@ -32,7 +32,7 @@ def main():
                     turn_left(90)
                 else:
                     turn_right(90)
-                time.sleep(1)  # Wait for a minute before moving again
+                time.sleep(1)  # Wait for a second before moving again
                 move_forward(40)  # Moving forward at 40 kilometers per hour
             else:
                 move_forward(30)
